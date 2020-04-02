@@ -1,0 +1,204 @@
+
+
+##############################################################################################
+COSAS A TOMAR EN CUENTA DJANGO V3
+
+ 1.- Agregar la app creada al proyecto en settings.py
+Solución: polls.apps.PollsListConfic >> En este caso la app es polls
+INSTALLED_APPS = [
+	'todo_list.apps.TodoListConfig',
+]
+
+ 1.5.- Incluir la urls de la app en el proyecto principal
+Solución: Creamos un nuevo archivo llamado urls.py dentro de la aplicación
+app_name = "posts"
+urlpatterns = [
+    path('', views.home, name='home'), # vistas basadas en funciones    
+]
+
+Y luego incluimos las urls de este archivo en el proyecto principal
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('posts/', include('posts.urls')), #incluimos las urls de la app posts
+]
+
+ 2.- Agregar esta ruta en TEMPLATES>DIR para que se reconozcan las plantillas en settings.py
+Solución: Crear la estructura de carpetas correcta en la app polls
+polls/templates/polls/base.html
+
+Agregar esto en settings.py
+TEMPLATES = [ 
+	{
+		'DIRS': [os.path.join(BASE_DIR, 'templates')],	
+	},
+]
+
+ 3.- Agregar la estructura de carpetas(static) correcta para que se reconozcan los estilos
+Solución:  Crear la estructura de carpetas correcta de static >> polls es la app (Nota: los archivos static son archivos css, javascript e imagenes)
+polls/static/polls/style.css
+
+Agregar estas lineas en los templates html:
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+
+Y en settings.py agregamos esto:
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+ 4.- Al renderizar las vistas a los templates siempre poner el nombre de la app primero; y generar su propio contexto
+return render(request, 'polls/home.html', {})
+
+ 5.- Al usar enlaces siempre ponerlos así: Primero el nombre de la app y luego la vista
+<li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+
+ 6.- 
+ 
+
+ 7.- Al heredar de una template siempre ponerlo asi: 
+polls/templates/polls/base.html >> según esta estructura
+{% extends 'polls/base.html' %}
+
+ 8.- Al redireccionar a una vista o página se hace así:
+return redirect('todo_list:home')
+
+ 9.- Diferencias entre render y redirect
+return render(request, 'polls/home.html', {})
+return redirect('todo_list:home')
+
+ 10.- Agregando bootstrap al proyecto
+
+ 11.- Consultas a la DB
+python manaye.py shell
+p = Post("Mi gato Garfierd", contenido="Historieta", timestamp=timezone.now()) -> Creamos un registro nuevo
+p.save()
+
+queryset = Post.objects.all() -> Consultar todos los registros de la tabla
+post = Posts.objects.get(pk=4) -> Consulta de un registro especifico
+Posts.objects.filter(titulo="Mi gato garfield") -> Filtramos los registros por titulo
+
+ 12.- Confirmar si un usuario esta logeado(Nota: El usuario inicio sesión)
+if request.user.is_authenticated:
+ 
+ 13.- Usando urls dinámicas -> el método trabaja con el parámetro que recibe de la url
+path('<int:post_id>/', views.post_detail, name='post_detail'),
+
+def post_detail(request, post_id=None):
+    post = get_object_or_404(Post, pk=post_id)
+
+ 14.- Agregando formularios a los modelos
+- Tenemos que crear un archivo nuevo dentro de la app llamado forms.py (Aqui se crea el formulario y se indica los campos que va tener)
+- Creo la vista del formulario en la que lo creo y lo valido; para despues renderizarlo a una plantilla html ej. post_list.html
+- Las formas de renderizas el formulario a la plantilla html son: 
+{{ form.as_table }}
+{{ form.as_p }}
+{{ form.as_ul }}
+
+ 15.- AL usar formularios siempre agregar esta etiqueta: {% csrf_token %} >>por seguridad
+   <h1>Post Form</h1>
+   <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Crear Post">
+   </form>
+
+ 16.- Al editar(Actualizar) un registro primero consultar el registro que quiero editar, luego crear el formulario y le paso como parametro una instancia del obejeto consultado anteriormente
+post = get_object_or_404(Post, pk=post_id)
+if request.method == 'POST':
+        form = PostForm(request.POST or None, instance=post)        
+        if form.is_valid():
+            form.save()  
+
+ 17.- Mostrando mensajes con django
+from django.contrib import messages -> importamos esta línea
+
+messages.success(request, 'Tu post ha sido creado correctamente JAJA...')
+
+código de la vista
+ {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-warning alert-dismissable" role=alert>
+                <button class="close" data-dismiss="alert">
+                    <small><sup>x</sup></small>                
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+ {% endif %}
+
+ 18.- Vistas basadas en funciones
+path('create/', views.post_create, name='post_create'), # vistas basadas en funciones    
+path('<int:post_id>/', views.post_detail, name='post_detail'),
+path('list/', views.post_list, name='post_list'),
+path('update/<int:post_id>/', views.post_update, name='post_update'),
+path('delete/<int:post_id>/', views.post_delete, name='post_delete'),
+
+ 19.- Vists basadas en clases
+path('', views.IndexView.as_view(), name='index'),
+path('<int:pk>/', views.DetailView.as_view(), name='detail'),
+path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
+
+ 20.- 
+
+
+##############################################################################################
+
+
+*** Errores Django v3.0 ***
+Solución a errores oythoncircle.com
+
+- TemplateDoesNotExist at /todo_list/home/
+Error during template rendering
+{% extends "base.html" %}
+
+Solución:
+Agregar el nombre de la aplicacion a la ruta
+{% extends "todo_list/base.html" %}
+
+https://www.pythoncircle.com/post/660/solving-django-error-templatedoesnotexist-at-app_name/
+ver:
+1.- nombre correcto de la aplicación
+2.- nombre correcto de la plantilla
+3.- Esta agregada la app al proyecto >> Installed Apps
+4.- Esta ha estructura de directorios correcta >> app_name/templates/app_name/home.html
+5.- agregar la ruta de plantillas >> 'DIRS': [os.path.join(BASE_DIR, 'templates')], en Settings.py
+
+- Error al renderizar datos a una página html
+
+Solución:
+Poner el nombre de la aplicacion en la ruta
+return render(request, 'app_name/home.html', {})
+
+- AttributeError: type object 'List' has no attribute 'object'
+Solución: Poner List.objects.all
+
+- NoReverseMatch at /todo_list/home/. 'todo_list/home' is not a valid view function or pattern name
+Solución:
+
+- TypeError: all() got an unexpected keyword argument 'pk'
+item = List.objects.all(pk=list_id)
+Solución: Poner
+item = List.objects.get(pk=list_id)
+
+
+- NoReverseMatch at /todo_list/cross_off/19
+Reverse for 'home' not found. 'home' is not a valid view function or pattern name
+
+- ImportError: Couldn't import Django
+Solución:
+Debemos activar primero el entorno virtual y luego correr la app
+
+- Djando admin v3.0 no inicia sesión, no hay errores, se sale del servidor solo
+"POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+
+Solución:
+
+- TypeError: context must be a dict rather than ModelFormMetaclass
+Solución: Cambiar el contexto a un dicccionario y luego renderizar este a la template
+
+- UnboundLocalError: local variable 'context' referenced before assignment
+Solución: Crear la variable context fuera de la condición para que sus limites no sean locales y se reconozcan al momento de renderizar
