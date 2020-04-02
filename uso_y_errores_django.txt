@@ -36,13 +36,26 @@ TEMPLATES = [
 	},
 ]
 
+CONFIGURANDO ARCHIVOS ESTATICOS(es parecido a los templates)
  3.- Agregar la estructura de carpetas(static) correcta para que se reconozcan los estilos
 Solución:  Crear la estructura de carpetas correcta de static >> polls es la app (Nota: los archivos static son archivos css, javascript e imagenes)
 polls/static/polls/style.css
+polls/static/polls/css
+polls/static/polls/img
+polls/static/polls/js
 
-Agregar estas lineas en los templates html:
+Agregar estas lineas en los templates html(En la base.html):
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+
+Estas rutas son para todo lo que involucra css, imagenes, javascript, etc.
+<link href="{% static 'core/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'core/vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'core/css/clean-blog.min.css' %}" rel="stylesheet">
+<header class="masthead" style="background-image: url('{% static 'core/img/home-bg.jpg' %}')">
+<script src="{% static core/vendor/jquery/jquery.min.js %}"></script>
+<script src="{% static core/vendor/bootstrap/js/bootstrap.bundle.min.js %}"></script>
+<script src="{% static core/js/clean-blog.min.js %}"></script>
 
 Y en settings.py agregamos esto:
 STATIC_URL = '/static/'
