@@ -48,14 +48,13 @@
     </nav>
 
     <!-- Cabecera -->
-    <header class="masthead" style="background-image: url('{% static 'core/img/home-bg.jpg' %}')">
+    <header class="masthead" style="background-image: url(' {% block background %} {% endblock %} ')">
       <div class="overlay"></div>
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            <div class="site-heading">
-              <h1>Manuel Herrera</h1>
-              <span class="subheading">Ingeniero de Software</span>
+            <div class="site-heading">              
+              {% block header %}{% endblock header %}              
             </div>
           </div>
         </div>
@@ -63,11 +62,18 @@
     </header>
 
     <!-- Contenido -->
-    {% block content %}
+    <div class="container">              
+      {% block content %}
+        
+      {% endblock content %}              
+    </div>
 
-    {% endblock content %}
-      
-
+    <!-- {{ request.path }} -->
+    <!-- que no muestre la linea en la portada, solo en las demas páginas -->
+    {% if request.path != "/core/" %}
+      <hr>
+    {% endif %}
+  
     <!-- Pié de página -->
     <footer>
       <div class="container">

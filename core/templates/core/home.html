@@ -2,10 +2,20 @@
 {% extends 'core/base.html' %}
 
 {% block title %} Portada {% endblock title %}    
+
+<!-- ponerlo en una sola linea para que lo entienda el navegador -->
+<!-- se carga la imagen -->
+{% block background %} {% load static %}{% static 'core/img/home-bg.jpg' %} {% endblock background %}
     
+
+{% block header %}
+    <h1>Manuel Herrera</h1>
+    <span class="subheading">Ingeniero de Software</span>    
+{% endblock header %}
+    
+
 {% block content %}
-    <div class="container">
-        <h2>Esto es la portada</h2>
-    </div>
+
 {% endblock content %}
+
     

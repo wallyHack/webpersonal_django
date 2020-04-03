@@ -150,13 +150,14 @@ path('list/', views.post_list, name='post_list'),
 path('update/<int:post_id>/', views.post_update, name='post_update'),
 path('delete/<int:post_id>/', views.post_delete, name='post_delete'),
 
- 19.- Vists basadas en clases
+ 19.- Vistas basadas en clases
 path('', views.IndexView.as_view(), name='index'),
 path('<int:pk>/', views.DetailView.as_view(), name='detail'),
 path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
 
- 20.- 
-
+NOTA:
+ 20.- Usando la etiqueta {% block content %} {% endblock content %}
+Todas las partes dinámicas de la página van en etiquetas block
 
 ##############################################################################################
 
