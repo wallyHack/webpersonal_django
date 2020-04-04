@@ -63,14 +63,14 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+y poner esto en url.py
++ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) +  static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+ 
  4.- Al renderizar las vistas a los templates siempre poner el nombre de la app primero; y generar su propio contexto
 return render(request, 'polls/home.html', {})
 
  5.- Al usar enlaces siempre ponerlos así: Primero el nombre de la app y luego la vista
 <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
-
- 6.- 
- 
 
  7.- Al heredar de una template siempre ponerlo asi: 
 polls/templates/polls/base.html >> según esta estructura
@@ -159,6 +159,69 @@ NOTA:
  20.- Usando la etiqueta {% block content %} {% endblock content %}
 Todas las partes dinámicas de la página van en etiquetas block
 
+21.- verbose_name = '' -> agrega un nombre global
+
+22.-  CONFIGURACIÓN PARA LA SUBIDA DE ARCHIVOS MULTIMEDIA POR PARTE DE UN USUARIO
+- poner el atributo upload_to = "proyectos", en el campo imagen -> donde se guardan las imagenes
+- crear una carpeta llamada "media" en la raiz del proyecto
+- configurar los ficheros media en (settings.py), poner esto:
+# media files
+MEDIA_URL = '/media/'                -> donde el servidor de django busca los archivos
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")  -> ruta interna donde tiene que encontrarlos
+
+23.- ------------------------------------------------------------------
+
+ARCHIVOS ESTÁTICOS
+se configuran los ficheros estáticos(imagenes, js, css):
+app/static/app/css
+app/static/app/img
+app/css/app/js
+
+- se agrega esto en settings.py
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+agregar en base.html -> ser cuidadoso y ver todo lo que involucra estaticos
+{% load static %}
+<link href="{% static 'core/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'core/vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'core/css/clean-blog.min.css' %}" rel="stylesheet">
+
+<!-- Bootstrap y Javascripts -->
+<script src="{% static 'core/vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'core/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'core/js/clean-blog.min.js' %}"></script>
+------------------------------------------------------------------
+
+ARCHIVOS DE TEMPLATES
+- se configuran las plantillas:
+app/templates/app/base.html
+app/templates/app/home.html
+app/template/app/about-me.html
+
+se agrega esto en settings.py
+'DIRS': [os.path.join(BASE_DIR, 'templates')],	
+
+-------------------------------------------------------------------
+
+link de como cargar imagenes y archivos en django
+https://simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html
+
+ARCHIVOS MEDIA
+- se configuran los ficheros multimedia(archivos que sube el usuario, como imagenes o pdf)
+- poner el atributo upload_to = "proyectos", en el campo imagen -> donde se guardan las imagenes
+- crear una carpeta llamada "media" en la raiz del proyecto
+- configurar los ficheros media en (settings.py), poner esto:
+# media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+poner esto en url.py -> del proyecto general y no en la app
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 ##############################################################################################
 
 
@@ -216,3 +279,8 @@ Solución: Cambiar el contexto a un dicccionario y luego renderizar este a la te
 
 - UnboundLocalError: local variable 'context' referenced before assignment
 Solución: Crear la variable context fuera de la condición para que sus limites no sean locales y se reconozcan al momento de renderizar
+
+- error con sql3:  No such table: main.auth_user__old
+solución: Desinstalar django y volver a instalarlo
+pip uninstall Django
+pip install Django==2.0
