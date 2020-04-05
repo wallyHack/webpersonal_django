@@ -245,6 +245,9 @@ NOTA: LAS IMAGENES A SUBIR DEBEN DE TENER LA EXTENCIÓN CORRECTA
 ej. basura.jpg reposteria.png imajen.jpeg --> correcto
 ej. basura  reposteria  imagen   -> incorrecto
 
+24.- NOTA: Al modificar un modelo, agregando nuevos campos poner null=True y blank=True al nuevo campo,
+porque ya hay instancias creadas y estas se afectarian tambien.(TENER CUIDADO AQUI)
+
 ##############################################################################################
 
 
