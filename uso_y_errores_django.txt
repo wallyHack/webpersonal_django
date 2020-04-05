@@ -3,6 +3,23 @@
 ##############################################################################################
 COSAS A TOMAR EN CUENTA DJANGO V3
 
+- extensiones para comprobar sintaxis en django(van en virtualenv)
+pip install pylint
+pip install pylint-django -> Esta se configura así:
+Archivo -> prefeencias -> configuración 
+buscar en la pantalla izquierda: pylintArgs
+click en esta opción: "python.linting.pylintArgs[]":[]
+
+editar esto -> "python.linting.pylintArgs[]":[] así:
+"python.linting.pylintArgs[]":[
+    "--errors.only",  nota: agregar esto sin commillas, ni coma
+    "--load-plugins", nota: agregar esto sin commillas, ni coma
+    "pylint_django"   nota: agregar esto sin commillas
+]
+
+- extension en visual studio code para autocompletar código django
+djaneiro
+
  1.- Agregar la app creada al proyecto en settings.py
 Solución: polls.apps.PollsListConfic >> En este caso la app es polls
 INSTALLED_APPS = [
@@ -84,6 +101,7 @@ return render(request, 'polls/home.html', {})
 return redirect('todo_list:home')
 
  10.- Agregando bootstrap al proyecto
+ Solo copiar la plantilla de ejemplo
 
  11.- Consultas a la DB
 python manaye.py shell
@@ -161,6 +179,7 @@ Todas las partes dinámicas de la página van en etiquetas block
 
 21.- verbose_name = '' -> agrega un nombre global
 
+------------------------------------------------------------------
 22.-  CONFIGURACIÓN PARA LA SUBIDA DE ARCHIVOS MULTIMEDIA POR PARTE DE UN USUARIO
 - poner el atributo upload_to = "proyectos", en el campo imagen -> donde se guardan las imagenes
 - crear una carpeta llamada "media" en la raiz del proyecto
@@ -221,6 +240,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 poner esto en url.py -> del proyecto general y no en la app
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+NOTA: LAS IMAGENES A SUBIR DEBEN DE TENER LA EXTENCIÓN CORRECTA
+ej. basura.jpg reposteria.png imajen.jpeg --> correcto
+ej. basura  reposteria  imagen   -> incorrecto
 
 ##############################################################################################
 

@@ -1,0 +1,33 @@
+
+{% extends 'core/base.html' %}
+
+{% block title %} Portafolio {% endblock title %}
+
+<!-- ponerlo en una sola linea para que lo entienda el navegador -->
+<!-- se carga la imagen -->
+{% block background %} {% load static %}{% static 'core/img/portfolio-bg.jpg' %} {% endblock background %}
+
+{% block header %}
+    <h1>Portafolio</h1>
+    <span class="subheading">Currículo</span>
+{% endblock header %}
+    
+{% block content %}
+
+    {% for proyecto in lista_proyectos %}        
+        <!-- Proyecto -->
+        <div class="row project">  	
+            <div class="col-lg-3 col-md-4 offset-lg-1">
+                <!-- para que se muestre correctamente la imagen poner proyecto.imagen.url -->
+                <img class="img-fluid" src="{{ proyecto.imagen.url }}" alt="">
+            </div>
+            <div class="col-lg-7 col-md-8">
+                <h2 class="section-heading title">{{ proyecto.titulo }}</h2>   
+            <p>{{ proyecto.descripcion }}</p>
+            <!-- <p><a href="http://google.com">Más información</a></p> -->
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock content %}
+    

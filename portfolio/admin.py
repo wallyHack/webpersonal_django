@@ -8,4 +8,4 @@ from .models import Proyecto
 class ProyectoAdmin(admin.ModelAdmin):
     readonly_fields = ('fecha_creacion', 'fecha_modificacion')
 
-admin.site.register(Proyecto)
+admin.site.register(Proyecto, ProyectoAdmin)

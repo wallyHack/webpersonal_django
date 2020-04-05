@@ -6,11 +6,11 @@ class Proyecto(models.Model):
     descripcion = models.TextField(blank=True, null=False) # cadena larga
     imagen = models.ImageField(upload_to="proyectos/", null=True)
     # se añade la hora automaticamente cuando se cree por primera vez(solo al crearse)
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Creación') # verbose_name -> es como se muestra en al admin site 
     # cada vez que se modifica
-    fecha_modificacion = models.DateTimeField(auto_now=True)
+    fecha_modificacion = models.DateTimeField(auto_now=True, verbose_name='Fecha de Edición')
 
-    # ordenar los proyectos por fecha de creacion, en orden inverso
+    # ordenar los proyectos por fecha de creacion, en orden inverso(Muestra primero los proyectos agregados recientemente)
     class Meta:
         verbose_name = 'proyecto'
         verbose_name_plural = 'proyectos'
