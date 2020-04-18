@@ -307,6 +307,9 @@ Solución: Cambiar el contexto a un dicccionario y luego renderizar este a la te
 Solución: Crear la variable context fuera de la condición para que sus limites no sean locales y se reconozcan al momento de renderizar
 
 - error con sql3:  No such table: main.auth_user__old
-solución: Desinstalar django y volver a instalarlo
-pip uninstall Django
-pip install Django==2.0
+solución: aplicar las migraciones para crear la base de datos
+python mangae.py migrate
+
+- error: vulnerabilidades de seguridad en el proyecto al usar django2.0
+Solución: actualizar la versión de django en mi virtualenv
+pip install --upgrade django
