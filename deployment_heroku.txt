@@ -1,0 +1,60 @@
+
+- hacer deployment del proyecto en heroku
+
+- instalar estas librerias en el entorno virtual
+pip install gunicorn==20.0.4          --> servidor http para hacer despliegue
+pip install psycopg2-binary==2.8.5    --> base de datos postgre sql
+pip install dj-database-url==0.5.0    --> base de datos externa
+pip install python-decouple==3.3
+
+- modificar settings.python
+DEBUG = False
+ALLOWED_HOSTS = ['*']
+
+# comentamos el uso de db sqlite
+
+- configuración de la base de datos en settings.py
+
+import dj_database_url
+from decouple import config
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
+}
+
+- configuración de archivos estáticos(CSS, Javascript e imágenes)
+NOTA --> Django no puede servir archivos estáticos en producción, para eso instalamos whitenoise
+
+agregar esto en settings.py
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+- agregar esto en urls.py del proyecto
+
+from django.conf.urls.static import static
+from django.conf import settings
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+- instalar esto en el entorno virtual
+pip install whitenoise==4.1.2
+
+- agregar un middleware
+'whitenoise.middleware.WhiteNoiseMiddleware',
+
+- agregar el almacenamiento de archivos estáticos en settings.py
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+- agregar la carpeta static en la raíz del proyecto y crear dentro un archivo .keep
+- crear el archivo Procfile(sin extensión) en la raíz del proyecto
+y dentro agregar esta linea:
+web: gunicorn webpersonal.wsgi --log-file -
+
+- hacer un commit con las configuraciones
+git commit -m "configuraciones para hacer el deployment en heroku"
